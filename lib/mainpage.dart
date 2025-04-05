@@ -15,10 +15,12 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<String> dropdownOptions = [
     "Date modified",
     "date created",
+   
   ];
 
   late String dropdownValue = dropdownOptions.first;
-
+ bool isDescending =  true;
+ bool isgrid = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         child: FaIcon(FontAwesomeIcons.plus),
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -68,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 
                 prefixIcon:  Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.search,size: 30,),
+                  child: Icon(Icons.search,size: 25,),
                 ),
            
                 fillColor: white,
@@ -76,8 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
                 prefixIconConstraints: BoxConstraints(
-                  minHeight: 42,
-                  maxWidth: 42
+                  minHeight: 30,
+                  maxWidth: 30
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -89,11 +92,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
+            SizedBox(height: 10,),
             Row(
         children: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.arrow_downward),
+            onPressed: () {
+              isDescending = !isDescending;
+            },
+           icon: FaIcon(
+              isDescending
+                  ? FontAwesomeIcons.arrowDown
+                  : FontAwesomeIcons.arrowUp,
+              size: 20,
+              color: gray700,
+            ),
             padding: EdgeInsets.zero,
             visualDensity: VisualDensity.compact,
             constraints: const BoxConstraints(),
@@ -106,40 +118,54 @@ class _MyHomePageState extends State<MyHomePage> {
           const SizedBox(width: 10),
           DropdownButton(
             value: dropdownValue,
-            icon: Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: const Icon(
-                Icons.arrow_downward,
-                size: 18,
-                color: gray700,
-              ),
-            ),
-          
-            
+          icon: Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: FaIcon(FontAwesomeIcons.arrowDownWideShort,size: 18,
+            color: gray700,),
+          ),
+          underline: SizedBox.shrink(),          
+            isDense: true,
             items: dropdownOptions
                 .map((e) => DropdownMenuItem(
+                
                       value: e,
-                      child: Text(
-                        e,
-                        style: const TextStyle(
-                          fontFamily: 'poppins',
-                          color: gray700,
-                        ),
-                      ),
-                    ))
+                      child:Row(
+                        children: [
+                          Text(e),
+                          if (e == dropdownValue)
+                            FaIcon(FontAwesomeIcons.check,size: 18,
+                              color: primary,)
+                       
+                     ]
+                     )
+                    )
+                    )
                 .toList(),
             selectedItemBuilder: (context) =>
                 dropdownOptions.map((e) => Text(e)).toList(),
             onChanged: (newValue) {
               setState(() {
                 dropdownValue = newValue.toString();
+                
               });
             },
           ),
           const Spacer(),
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.menu),
+            onPressed: () {
+            setState(() {
+              isgrid = !isgrid;
+            });
+            },
+            
+            
+           icon: FaIcon(
+              isgrid
+                  ? FontAwesomeIcons.tableCellsLarge
+                  : FontAwesomeIcons.bars,
+              size: 20,
+              color: gray700,
+            ),
             padding: EdgeInsets.zero,
             visualDensity: VisualDensity.compact,
             constraints: const BoxConstraints(),
@@ -151,64 +177,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-          SizedBox(height: 5,),
+          SizedBox(height: 10,),
           Expanded(
-            child: GridView.builder(
-              itemCount: 11,
-              
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-             // Adjusted spacing between grid items
-              ),
-              itemBuilder: (context, int index) {
-                return Container(
-
-                 decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: primary),
-                 
-                  ),
-                  child:Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                    
-                      children: [
-                        const Text(
-                          "This is going to be a title",
-                          style: TextStyle(
-                            fontFamily: 'fredoka',
-                          ),
-                        ),
-                       
-                       SizedBox(height: 6,),
-                        Row(
-                          children: const [
-                             Text("First chip"),
-                            
-                          ],
-                        ),
-                          SizedBox(height: 6,),
-                        const Text("Some Content"),
-                        
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text("02 Nov, 2023"),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.delete),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+            child: isgrid ? notegrid() :NotesList(),
           )
           ],
         ),
@@ -216,4 +187,143 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   
 }
+
+  }
+  class NotesList extends StatefulWidget {
+  const NotesList({super.key});
+
+  @override
+  State<NotesList> createState() => _NotesListState();
 }
+
+class _NotesListState extends State<NotesList> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: 15,
+      itemBuilder: 
+    (context,index){
+    
+      return Notecard();
+    },
+    );
+  }
+}
+
+GridView notegrid() {
+    return GridView.builder(
+            itemCount: 11,
+            
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 7,
+              crossAxisSpacing: 7,
+           // Adjusted spacing between grid items
+            ),
+            itemBuilder: (context, int index) {
+              return Notecard(isInGrid: false);
+            },
+          );
+  }
+ class notecard extends StatelessWidget {
+  const notecard ({
+    required this.isInGrid,
+    super.key});
+   final bool isInGrid;
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+  Container Notecard() {
+    return Container(
+
+             decoration: BoxDecoration(
+                color: white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: primary,width: 2),
+               boxShadow: 
+                   [
+                      BoxShadow(
+                        color: primary.withOpacity(0.5),
+                        blurRadius: 4,
+                        offset: const Offset(4, 4),
+                      ),
+                    ],
+                   
+              ),
+              child:Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                
+                  children: [
+                    const Text(
+                      "This is going to be a title",
+                       maxLines: 1,
+                       overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'fredoka',
+                        fontSize: 16,
+                        color: gray900,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                   
+                  SizedBox(height: 2,),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children:  List.generate(3, (index)=> Container(
+                       decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: const Color.fromARGB(106, 189, 184, 184),
+                        ),
+                        margin:  EdgeInsets.only(right: 8),
+                         child:Text("  First chip  ",style: TextStyle(
+                           color: gray700,
+                           fontSize: 14
+                         ),),
+                       ),
+                       )
+                          
+                        
+                      ),
+                    ),
+                      SizedBox(height: 4,),
+                 
+                     if (isInGrid)
+                       Expanded(
+                        child: const Text("Some Content",
+                        style: TextStyle(
+                          color:gray700
+                        ),),
+                      
+                    )
+                    else
+                    Text("Some Content",
+                        style: TextStyle(
+                          color:gray700
+                        ),),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          children: [
+                            const Text("02 Nov, 2023",style: TextStyle(
+                              color: gray700,
+                              fontSize: 15,
+                            ),),
+                          
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.delete),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+  }
