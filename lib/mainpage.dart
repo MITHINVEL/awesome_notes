@@ -200,130 +200,131 @@ class _NotesListState extends State<NotesList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 15,
+      itemCount: 11,
       itemBuilder: 
     (context,index){
     
-      return Notecard();
+      return Notecard(isInGrid: false);
+      // return Container(
     },
+    );
+  }
+}
+class Notecard extends StatelessWidget {
+  const Notecard({
+    required this.isInGrid,
+    super.key,
+  });
+
+  final bool isInGrid;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: primary, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: primary.withOpacity(0.5),
+            blurRadius: 4,
+            offset: const Offset(4, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            const Text(
+              "This is going to be a title",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontFamily: 'fredoka',
+                fontSize: 16,
+                color: gray900,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 2),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(
+                  3,
+                  (index) => Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromARGB(106, 189, 184, 184),
+                    ),
+                    margin: const EdgeInsets.only(right: 8),
+                    child: const Text(
+                      "  First chip  ",
+                      style: TextStyle(
+                        color: gray700,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            if (isInGrid)
+              const Expanded(
+                child: Text(
+                  "Some Content",
+                  style: TextStyle(
+                    color: gray700,
+                  ),
+                ),
+              )
+            else
+              const Text(
+                "Some Content",
+                style: TextStyle(
+                  color: gray700,
+                ),
+              ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  children: [
+                    const Text(
+                      "02 Nov, 2023",
+                      style: TextStyle(
+                        color: gray700,
+                        fontSize: 15,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.delete),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
 GridView notegrid() {
-    return GridView.builder(
-            itemCount: 11,
-            
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 7,
-              crossAxisSpacing: 7,
-           // Adjusted spacing between grid items
-            ),
-            itemBuilder: (context, int index) {
-              return Notecard(isInGrid: false);
-            },
-          );
-  }
- class notecard extends StatelessWidget {
-  const notecard ({
-    required this.isInGrid,
-    super.key});
-   final bool isInGrid;
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
+  return GridView.builder(
+    itemCount: 11,
+    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      mainAxisSpacing: 7,
+      crossAxisSpacing: 7,
+    ),
+    itemBuilder: (context, int index) {
+      return Notecard(isInGrid: true);
+    },
+  );
 }
-  Container Notecard() {
-    return Container(
-
-             decoration: BoxDecoration(
-                color: white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: primary,width: 2),
-               boxShadow: 
-                   [
-                      BoxShadow(
-                        color: primary.withOpacity(0.5),
-                        blurRadius: 4,
-                        offset: const Offset(4, 4),
-                      ),
-                    ],
-                   
-              ),
-              child:Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                
-                  children: [
-                    const Text(
-                      "This is going to be a title",
-                       maxLines: 1,
-                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontFamily: 'fredoka',
-                        fontSize: 16,
-                        color: gray900,
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                   
-                  SizedBox(height: 2,),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children:  List.generate(3, (index)=> Container(
-                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color.fromARGB(106, 189, 184, 184),
-                        ),
-                        margin:  EdgeInsets.only(right: 8),
-                         child:Text("  First chip  ",style: TextStyle(
-                           color: gray700,
-                           fontSize: 14
-                         ),),
-                       ),
-                       )
-                          
-                        
-                      ),
-                    ),
-                      SizedBox(height: 4,),
-                 
-                     if (isInGrid)
-                       Expanded(
-                        child: const Text("Some Content",
-                        style: TextStyle(
-                          color:gray700
-                        ),),
-                      
-                    )
-                    else
-                    Text("Some Content",
-                        style: TextStyle(
-                          color:gray700
-                        ),),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Row(
-                          children: [
-                            const Text("02 Nov, 2023",style: TextStyle(
-                              color: gray700,
-                              fontSize: 15,
-                            ),),
-                          
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.delete),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-  }
