@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:awesome_notes/constant.dart';
-import 'package:awesome_notes/mainpage.dart';
+import 'package:awesome_notes/core/constant.dart';
+import 'package:awesome_notes/pages/mainpage.dart';
 void main() {
   runApp(const MyApp());
 }
